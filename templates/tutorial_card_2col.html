@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>讲解卡片 · 2 卡并列 · Dark Gold</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Serif+SC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!--
+  ════════════════════════════════════════════════════════════
+  ★ 录屏讲解卡片 · 2 卡并列 · 暗金风 ★
+  ★ Tutorial Cards · 2-Column · Dark Gold ★
+  ════════════════════════════════════════════════════════════
+
+  使用场景:二选一 / 对比 / VS 对决
+  互动:鼠标悬停 → 该卡放大发光,另一卡变暗模糊
+  尺寸:1920×1080
+  ════════════════════════════════════════════════════════════
+-->
+
+<style>
+:root {
+  --bg-base: #0a0806;
+  --gold-primary: #d4a857;
+  --gold-bright: #f4cf7a;
+  --gold-deep: #8a6a2e;
+  --gold-glow: rgba(212, 168, 87, 0.45);
+  --ink-primary: #ede4d0;
+  --ink-muted: #8a8378;
+  --ink-faint: #4a4640;
+  --line: rgba(212, 168, 87, 0.2);
+  --line-strong: rgba(212, 168, 87, 0.5);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 1920px;
+  height: 1080px;
+  background: var(--bg-base);
+  color: var(--ink-primary);
+  font-family: 'Noto Serif SC', serif;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(212, 168, 87, 0.08), transparent 70%),
+    radial-gradient(ellipse 60% 60% at 50% 80%, rgba(212, 168, 87, 0.05), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ━━━ 顶部标题 ━━━ */
+.header {
+  text-align: center;
+  padding: 64px 80px 36px;
+  position: relative;
+  z-index: 10;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  letter-spacing: 0.4em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.eyebrow::before, .eyebrow::after {
+  content: '—';
+  color: var(--gold-deep);
+  margin: 0 18px;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
+  font-size: 64px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--ink-primary);
+  margin-bottom: 14px;
+}
+
+.title .accent {
+  color: var(--gold-bright);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: var(--ink-muted);
+  letter-spacing: 0.1em;
+}
+
+/* ━━━ 卡片舞台(2 卡 + 中间分隔符) ━━━ */
+.cards-stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 140px 1fr;
+  gap: 0;
+  padding: 60px 260px 120px;
+  position: relative;
+  z-index: 5;
+  align-items: stretch;
+}
+
+/* 中间 VS 分隔符 */
+.vs-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.vs-divider .line-top,
+.vs-divider .line-bottom {
+  width: 1px;
+  flex: 1;
+  background: linear-gradient(180deg, transparent, var(--line-strong) 30%, var(--line-strong) 70%, transparent);
+}
+
+.vs-divider .vs-symbol {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--gold-primary);
+  padding: 20px 0;
+  background: var(--bg-base);
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+}
+
+.vs-divider .vs-symbol::before,
+.vs-divider .vs-symbol::after {
+  content: '◇';
+  display: block;
+  text-align: center;
+  color: var(--gold-deep);
+  font-size: 10px;
+  margin: 10px 0;
+}
+
+/* ━━━ 卡片本体 ━━━ */
+.card {
+  background: linear-gradient(180deg, rgba(20, 16, 12, 0.7), rgba(10, 8, 6, 0.95));
+  border: 1px solid var(--line);
+  padding: 64px 56px 68px;
+  position: relative;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.9;
+  filter: brightness(0.95);
+}
+
+.card::before, .card::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--gold-deep);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.6;
+}
+
+.card::before {
+  top: 16px; left: 16px;
+  border-right: none; border-bottom: none;
+}
+
+.card::after {
+  bottom: 16px; right: 16px;
+  border-left: none; border-top: none;
+}
+
+/* ═══ 聚焦效果 ═══ */
+.cards-stage:hover .card {
+  opacity: 0.35;
+  filter: brightness(0.6) blur(2px);
+  transform: scale(0.96);
+}
+
+.cards-stage .card:hover {
+  opacity: 1;
+  filter: brightness(1.1) blur(0);
+  transform: scale(1.03) translateY(-8px);
+  border-color: var(--line-strong);
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    0 20px 40px -10px var(--gold-glow),
+    inset 0 1px 0 rgba(212, 168, 87, 0.15);
+  z-index: 10;
+}
+
+.cards-stage .card:hover::before,
+.cards-stage .card:hover::after {
+  width: 42px; height: 42px;
+  border-color: var(--gold-bright);
+  opacity: 1;
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+/* ━━━ 卡内元素 ━━━ */
+.card-roman {
+  position: absolute;
+  top: 32px; right: 44px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 96px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  line-height: 1;
+  opacity: 0.4;
+  transition: all 0.5s ease;
+}
+
+.cards-stage .card:hover .card-roman {
+  color: var(--gold-deep);
+  opacity: 0.7;
+}
+
+.card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  letter-spacing: 0.35em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 2;
+  transition: color 0.4s ease;
+}
+
+.cards-stage .card:hover .card-label {
+  color: var(--gold-primary);
+}
+
+.card-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 40px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--ink-primary);
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.card-title-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--gold-primary);
+  letter-spacing: 0.08em;
+  margin-bottom: 28px;
+}
+
+.card-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold-primary), transparent);
+  margin-bottom: 24px;
+  transition: width 0.5s ease;
+}
+
+.cards-stage .card:hover .card-divider {
+  width: 100px;
+  background: linear-gradient(90deg, var(--gold-bright), transparent);
+}
+
+.card-desc {
+  font-size: 18px;
+  line-height: 1.85;
+  color: var(--ink-muted);
+  margin-bottom: 26px;
+  letter-spacing: 0.03em;
+  transition: color 0.4s ease;
+}
+
+.cards-stage .card:hover .card-desc {
+  color: var(--ink-primary);
+}
+
+.card-points {
+  list-style: none;
+  flex: 1;
+  margin-bottom: 28px;
+}
+
+.card-points li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  color: var(--ink-muted);
+  padding: 11px 0 11px 24px;
+  position: relative;
+  border-bottom: 1px dashed var(--line);
+  letter-spacing: 0.02em;
+  transition: color 0.4s ease, padding-left 0.4s ease;
+}
+
+.card-points li:last-child { border-bottom: none; }
+
+.card-points li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--gold-deep);
+  font-size: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: color 0.3s ease;
+}
+
+.cards-stage .card:hover .card-points li {
+  color: var(--ink-primary);
+  padding-left: 28px;
+}
+
+.cards-stage .card:hover .card-points li::before {
+  color: var(--gold-bright);
+}
+
+.card-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.25em;
+  padding: 10px 20px;
+  border: 1px solid var(--line-strong);
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  background: rgba(212, 168, 87, 0.06);
+  align-self: flex-start;
+  transition: all 0.4s ease;
+}
+
+.cards-stage .card:hover .card-tag {
+  background: rgba(212, 168, 87, 0.15);
+  border-color: var(--gold-primary);
+  color: var(--gold-bright);
+  box-shadow: 0 0 18px var(--gold-glow);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">两种方案 · TWO OPTIONS</div>
+  <h1 class="title">A 还是 <span class="accent">B</span>?</h1>
+  <p class="subtitle">鼠标移到对应卡片查看详情</p>
+</div>
+
+<div class="cards-stage">
+
+  <!-- ━━━ 左卡 ━━━ -->
+  <div class="card">
+    <div class="card-roman">A</div>
+    <div class="card-label">OPTION · A</div>
+    <h2 class="card-title">本地部署</h2>
+    <p class="card-title-en">Local Deployment</p>
+    <div class="card-divider"></div>
+
+    <p class="card-desc">
+      从零开始配置环境,完整跑通项目推理链路。适合希望理解原理、自行修改与扩展的进阶用户。
+    </p>
+
+    <ul class="card-points">
+      <li>需要 Python 3.10+ 环境</li>
+      <li>需要 NVIDIA GPU 显存 8GB+</li>
+      <li>命令行操作 + 排错能力</li>
+      <li>可自由修改源码</li>
+      <li>预计 30 分钟完成部署</li>
+    </ul>
+
+    <span class="card-tag">适合 · 折腾派</span>
+  </div>
+
+  <!-- ━━━ 中间 VS 分隔符 ━━━ -->
+  <div class="vs-divider">
+    <div class="line-top"></div>
+    <div class="vs-symbol">OR</div>
+    <div class="line-bottom"></div>
+  </div>
+
+  <!-- ━━━ 右卡 ━━━ -->
+  <div class="card">
+    <div class="card-roman">B</div>
+    <div class="card-label">OPTION · B</div>
+    <h2 class="card-title">一键整合包</h2>
+    <p class="card-title-en">All-in-One Package</p>
+    <div class="card-divider"></div>
+
+    <p class="card-desc">
+      开箱即用的打包版本,免环境配置,免依赖安装。下载解压即可运行,专为不想折腾的用户准备。
+    </p>
+
+    <ul class="card-points">
+      <li>无需安装任何前置程序</li>
+      <li>解压即用 · 1 分钟上手</li>
+      <li>内置预设与常用配置</li>
+      <li>无需了解任何技术细节</li>
+      <li>跟随教程同步更新迭代</li>
+    </ul>
+
+    <span class="card-tag">适合 · 即用派</span>
+  </div>
+
+</div>
+
+</body>
+</html>

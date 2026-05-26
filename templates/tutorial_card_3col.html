@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>讲解卡片 · 3 卡并列 · Dark Gold</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Noto+Serif+SC:wght@400;500;600;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!--
+  ════════════════════════════════════════════════════════════
+  ★ 录屏讲解卡片模板 · 3 卡并列 · 暗金风 ★
+  ★ Tutorial Cards · 3-Column · Dark Gold ★
+  ════════════════════════════════════════════════════════════
+
+  使用场景:视频里有"三点要说"的内容
+  互动:鼠标悬停 → 该卡放大发光,其他卡变暗模糊
+  尺寸:1920×1080 (16:9 录屏友好)
+
+  使用方法:
+  1. 在 body 区改 6 处文字(每张卡 2 处)
+  2. 用浏览器全屏打开
+  3. 录屏时把鼠标依次移到每张卡上
+  ════════════════════════════════════════════════════════════
+-->
+
+<style>
+
+/* ━━━━━━━━━━━━━━━━━━━━ CONFIG ━━━━━━━━━━━━━━━━━━━━ */
+
+:root {
+  /* 主配色(默认暗金) */
+  --bg-base: #0a0806;
+  --bg-deep: #050403;
+  --gold-primary: #d4a857;
+  --gold-bright: #f4cf7a;
+  --gold-deep: #8a6a2e;
+  --gold-glow: rgba(212, 168, 87, 0.45);
+  --ink-primary: #ede4d0;
+  --ink-muted: #8a8378;
+  --ink-faint: #4a4640;
+  --line: rgba(212, 168, 87, 0.2);
+  --line-strong: rgba(212, 168, 87, 0.5);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 1920px;
+  height: 1080px;
+  background: var(--bg-base);
+  color: var(--ink-primary);
+  font-family: 'Noto Serif SC', serif;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 全局背景光晕 */
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(212, 168, 87, 0.08), transparent 70%),
+    radial-gradient(ellipse 60% 60% at 50% 80%, rgba(212, 168, 87, 0.05), transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 颗粒纹理 */
+body::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.08;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* ━━━ 顶部标题区 ━━━ */
+.header {
+  text-align: center;
+  padding: 64px 80px 36px;
+  position: relative;
+  z-index: 10;
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  letter-spacing: 0.4em;
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.eyebrow::before, .eyebrow::after {
+  content: '—';
+  color: var(--gold-deep);
+  margin: 0 18px;
+}
+
+.title {
+  font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
+  font-size: 64px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  color: var(--ink-primary);
+  margin-bottom: 14px;
+}
+
+.title .accent {
+  color: var(--gold-bright);
+  font-style: italic;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: var(--ink-muted);
+  letter-spacing: 0.1em;
+}
+
+/* ━━━ 卡片容器(关键:这里是"舞台",鼠标 hover 时整个舞台变暗) ━━━ */
+.cards-stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px;
+  padding: 60px 220px 120px;
+  position: relative;
+  z-index: 5;
+}
+
+/* ━━━ 卡片本体 ━━━ */
+.card {
+  background: linear-gradient(180deg, rgba(20, 16, 12, 0.7), rgba(10, 8, 6, 0.95));
+  border: 1px solid var(--line);
+  padding: 52px 44px 56px;
+  position: relative;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+
+  /* 关键过渡:0.5s 是录屏友好的速度 */
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* 默认状态:有点压暗 */
+  opacity: 0.9;
+  filter: brightness(0.95);
+}
+
+/* 装饰角(左上 + 右下) */
+.card::before, .card::after {
+  content: '';
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 1.5px solid var(--gold-deep);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.6;
+}
+
+.card::before {
+  top: 14px;
+  left: 14px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.card::after {
+  bottom: 14px;
+  right: 14px;
+  border-left: none;
+  border-top: none;
+}
+
+/* ═══════ 聚焦效果(核心) ═══════
+   规则:当 .cards-stage 被 hover 时,所有 .card 都变暗模糊
+        但被 hover 的那张 .card 反过来变亮放大
+   原理:CSS :hover 会冒泡,我们用容器 hover 控制全局,卡片 hover 控制自己 */
+
+/* 容器 hover 时,所有卡变暗模糊 */
+.cards-stage:hover .card {
+  opacity: 0.35;
+  filter: brightness(0.6) blur(2px);
+  transform: scale(0.96);
+}
+
+/* 但被 hover 的那张卡反向:变亮、放大、发光 */
+.cards-stage .card:hover {
+  opacity: 1;
+  filter: brightness(1.1) blur(0);
+  transform: scale(1.04) translateY(-8px);
+  border-color: var(--line-strong);
+  box-shadow:
+    0 30px 60px -20px rgba(0, 0, 0, 0.8),
+    0 20px 40px -10px var(--gold-glow),
+    inset 0 1px 0 rgba(212, 168, 87, 0.15);
+  z-index: 10;
+}
+
+/* hover 卡的装饰角变金色变大 */
+.cards-stage .card:hover::before,
+.cards-stage .card:hover::after {
+  width: 36px;
+  height: 36px;
+  border-color: var(--gold-bright);
+  opacity: 1;
+  box-shadow: 0 0 16px var(--gold-glow);
+}
+
+/* ━━━ 卡内元素 ━━━ */
+
+/* 罗马数字水印 */
+.card-roman {
+  position: absolute;
+  top: 28px;
+  right: 36px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 80px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  line-height: 1;
+  opacity: 0.4;
+  transition: all 0.5s ease;
+}
+
+.cards-stage .card:hover .card-roman {
+  color: var(--gold-deep);
+  opacity: 0.7;
+  transform: translateY(-4px);
+}
+
+/* 编号标签 */
+.card-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.35em;
+  color: var(--gold-deep);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 2;
+  transition: color 0.4s ease;
+}
+
+.cards-stage .card:hover .card-label {
+  color: var(--gold-primary);
+}
+
+/* 主标题(中文) */
+.card-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  line-height: 1.3;
+  color: var(--ink-primary);
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+/* 英文副标 */
+.card-title-en {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--gold-primary);
+  letter-spacing: 0.08em;
+  margin-bottom: 24px;
+}
+
+/* 装饰分隔线 */
+.card-divider {
+  width: 50px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold-primary), transparent);
+  margin-bottom: 22px;
+  transition: width 0.5s ease;
+}
+
+.cards-stage .card:hover .card-divider {
+  width: 90px;
+  background: linear-gradient(90deg, var(--gold-bright), transparent);
+}
+
+/* 描述段落 */
+.card-desc {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--ink-muted);
+  margin-bottom: 22px;
+  letter-spacing: 0.03em;
+  transition: color 0.4s ease;
+}
+
+.cards-stage .card:hover .card-desc {
+  color: var(--ink-primary);
+}
+
+/* 要点列表 */
+.card-points {
+  list-style: none;
+  flex: 1;
+  margin-bottom: 24px;
+}
+
+.card-points li {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: var(--ink-muted);
+  padding: 9px 0 9px 22px;
+  position: relative;
+  border-bottom: 1px dashed var(--line);
+  letter-spacing: 0.02em;
+  transition: color 0.4s ease, padding-left 0.4s ease;
+}
+
+.card-points li:last-child {
+  border-bottom: none;
+}
+
+.card-points li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--gold-deep);
+  font-size: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: color 0.3s ease;
+}
+
+.cards-stage .card:hover .card-points li {
+  color: var(--ink-primary);
+  padding-left: 26px;
+}
+
+.cards-stage .card:hover .card-points li::before {
+  color: var(--gold-bright);
+}
+
+/* 底部标签 */
+.card-tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.25em;
+  padding: 9px 18px;
+  border: 1px solid var(--line-strong);
+  color: var(--gold-primary);
+  text-transform: uppercase;
+  background: rgba(212, 168, 87, 0.06);
+  align-self: flex-start;
+  transition: all 0.4s ease;
+}
+
+.cards-stage .card:hover .card-tag {
+  background: rgba(212, 168, 87, 0.15);
+  border-color: var(--gold-primary);
+  color: var(--gold-bright);
+  box-shadow: 0 0 18px var(--gold-glow);
+}
+
+</style>
+</head>
+<body>
+
+<!-- ════════ 顶部标题区 ════════ -->
+<div class="header">
+  <div class="eyebrow">本期重点 · KEY POINTS</div>
+  <h1 class="title">三种方案<span class="accent">,任你选择</span></h1>
+  <p class="subtitle">鼠标移到对应卡片查看详情</p>
+</div>
+
+<!-- ════════ 卡片舞台 ════════ -->
+<div class="cards-stage">
+
+  <!-- ━━━ 第一张卡 ━━━ -->
+  <div class="card">
+    <div class="card-roman">I</div>
+    <div class="card-label">OPTION · 01</div>
+    <h2 class="card-title">本地部署方案</h2>
+    <p class="card-title-en">Local Deployment</p>
+    <div class="card-divider"></div>
+
+    <p class="card-desc">
+      从零开始配置环境,完整跑通项目推理链路。适合希望理解原理、自行修改的进阶用户。
+    </p>
+
+    <ul class="card-points">
+      <li>需要 Python 3.10+ 环境</li>
+      <li>需要 NVIDIA GPU 显存 8GB+</li>
+      <li>命令行操作 + 排错能力</li>
+      <li>预计 30 分钟完成部署</li>
+    </ul>
+
+    <span class="card-tag">适合 · 折腾派</span>
+  </div>
+
+  <!-- ━━━ 第二张卡 ━━━ -->
+  <div class="card">
+    <div class="card-roman">II</div>
+    <div class="card-label">OPTION · 02</div>
+    <h2 class="card-title">一键整合包</h2>
+    <p class="card-title-en">All-in-One Package</p>
+    <div class="card-divider"></div>
+
+    <p class="card-desc">
+      开箱即用的打包版本,免环境配置,免依赖安装。下载解压即可运行,专为快速上手设计。
+    </p>
+
+    <ul class="card-points">
+      <li>无需安装任何前置程序</li>
+      <li>解压即用 · 1 分钟上手</li>
+      <li>内置常用预设与配置</li>
+      <li>跟随教程同步迭代</li>
+    </ul>
+
+    <span class="card-tag">适合 · 即用派</span>
+  </div>
+
+  <!-- ━━━ 第三张卡 ━━━ -->
+  <div class="card">
+    <div class="card-roman">III</div>
+    <div class="card-label">OPTION · 03</div>
+    <h2 class="card-title">在线试用</h2>
+    <p class="card-title-en">Online Demo</p>
+    <div class="card-divider"></div>
+
+    <p class="card-desc">
+      官方 HuggingFace Space 直接体验,无需任何本地配置。适合先试用再决定的观望用户。
+    </p>
+
+    <ul class="card-points">
+      <li>无需注册任何账号</li>
+      <li>免费额度足够测试</li>
+      <li>速度受官方服务限制</li>
+      <li>无法持久化保存数据</li>
+    </ul>
+
+    <span class="card-tag">适合 · 观望派</span>
+  </div>
+
+</div>
+
+</body>
+</html>
