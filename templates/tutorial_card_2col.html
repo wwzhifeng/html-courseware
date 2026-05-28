@@ -45,8 +45,25 @@ html, body {
 body {
   position: relative;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+/* 内容安全区:居中 ~85%,四周留深色边 */
+.safe-area {
+  width: 86%;
+  height: 86%;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(212, 168, 87, 0.12);
+  border-radius: 4px;
+  background: radial-gradient(ellipse 100% 100% at 50% 35%, rgba(212,168,87,0.03), transparent 70%);
+  box-shadow: 0 40px 120px -40px rgba(0,0,0,0.9);
+  overflow: hidden;
+}
+
 
 body::before {
   content: '';
@@ -73,7 +90,7 @@ body::after {
 /* ━━━ 顶部标题 ━━━ */
 .header {
   text-align: center;
-  padding: 64px 80px 36px;
+  padding: 48px 60px 24px;
   position: relative;
   z-index: 10;
 }
@@ -121,7 +138,7 @@ body::after {
   display: grid;
   grid-template-columns: 1fr 140px 1fr;
   gap: 0;
-  padding: 60px 260px 120px;
+  padding: 50px 120px 80px;
   position: relative;
   z-index: 5;
   align-items: stretch;
@@ -374,6 +391,8 @@ body::after {
 </head>
 <body>
 
+<div class="safe-area">
+
 <div class="header">
   <div class="eyebrow">两种方案 · TWO OPTIONS</div>
   <h1 class="title">A 还是 <span class="accent">B</span>?</h1>
@@ -434,6 +453,8 @@ body::after {
 
     <span class="card-tag">适合 · 即用派</span>
   </div>
+
+</div>
 
 </div>
 

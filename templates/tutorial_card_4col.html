@@ -45,8 +45,25 @@ html, body {
 body {
   position: relative;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
+
+/* 内容安全区:居中 ~85%,四周留深色边 */
+.safe-area {
+  width: 86%;
+  height: 86%;
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid rgba(212, 168, 87, 0.12);
+  border-radius: 4px;
+  background: radial-gradient(ellipse 100% 100% at 50% 35%, rgba(212,168,87,0.03), transparent 70%);
+  box-shadow: 0 40px 120px -40px rgba(0,0,0,0.9);
+  overflow: hidden;
+}
+
 
 body::before {
   content: '';
@@ -73,7 +90,7 @@ body::after {
 /* ━━━ 顶部标题 ━━━ */
 .header {
   text-align: center;
-  padding: 50px 80px 28px;
+  padding: 44px 60px 22px;
   position: relative;
   z-index: 10;
 }
@@ -95,7 +112,7 @@ body::after {
 
 .title {
   font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
-  font-size: 52px;
+  font-size: 44px;
   font-weight: 500;
   letter-spacing: 0.02em;
   line-height: 1.2;
@@ -121,8 +138,8 @@ body::after {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  gap: 48px;
-  padding: 40px 200px 100px;
+  gap: 36px;
+  padding: 20px 90px 44px;
   position: relative;
   z-index: 5;
 }
@@ -131,7 +148,7 @@ body::after {
 .card {
   background: linear-gradient(180deg, rgba(20, 16, 12, 0.7), rgba(10, 8, 6, 0.95));
   border: 1px solid var(--line);
-  padding: 40px 44px 44px;
+  padding: 30px 40px 32px;
   position: relative;
   cursor: pointer;
   backdrop-filter: blur(10px);
@@ -336,6 +353,8 @@ body::after {
 </head>
 <body>
 
+<div class="safe-area">
+
 <div class="header">
   <div class="eyebrow">四个方案 · FOUR OPTIONS</div>
   <h1 class="title">选择<span class="accent">最适合</span>你的</h1>
@@ -427,6 +446,8 @@ body::after {
 
     <span class="card-tag">适合 · 团队</span>
   </div>
+
+</div>
 
 </div>
 
