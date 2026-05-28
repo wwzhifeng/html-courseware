@@ -46,16 +46,28 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
-  width: 1920px;
-  height: 1080px;
+  width: 100%;
+  height: 100%;
+  margin: 0;
   background: var(--bg-base);
   color: var(--ink-primary);
   font-family: 'Noto Serif SC', serif;
   overflow: hidden;
 }
 
-body {
-  position: relative;
+/* 舞台:固定 1920x1080,通过 JS 缩放居中 */
+#stage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: center center;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+#stage {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,7 +90,7 @@ body {
 
 
 /* 全局背景光晕 */
-body::before {
+#stage::before {
   content: '';
   position: absolute;
   inset: 0;
@@ -90,7 +102,7 @@ body::before {
 }
 
 /* 颗粒纹理 */
-body::after {
+#stage::after {
   content: '';
   position: absolute;
   inset: 0;
@@ -395,6 +407,7 @@ body::after {
 </style>
 </head>
 <body>
+<div id="stage">
 
 <!-- ════════ 顶部标题区 ════════ -->
 <div class="safe-area">
@@ -478,5 +491,23 @@ body::after {
 
 </div>
 
+
+<script>
+// 自适应缩放:让 1920x1080 内容在任何分辨率下等比居中铺满
+function fitScale() {
+  const dw = window.innerWidth;
+  const dh = window.innerHeight;
+  const scale = Math.min(dw / 1920, dh / 1080);
+  const stage = document.getElementById('stage');
+  if (stage) {
+    stage.style.transform = `translate(-50%, -50%) scale(${scale})`;
+  }
+}
+window.addEventListener('resize', fitScale);
+window.addEventListener('load', fitScale);
+fitScale();
+</script>
+
+</div>
 </body>
 </html>
